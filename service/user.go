@@ -1,8 +1,10 @@
 package service
 
 import (
+	"fmt"
+	"log"
 	"strconv"
-	"demo/models"
+	"github.com/goweb/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,7 +16,14 @@ func ListUser(params map[string]string) (result []models.User) {
 	page,_ := strconv.Atoi(params["page"])
 	page_size,_ := strconv.Atoi(params["page_size"])
 	offset := (page - 1) * page_size
-	err :=models.DB.Offset(offset).Limit(page_size).Find(&result).Error
+	query := models.DB.Offset(offset).Limit(page_size)
+	if params["username"] !="" {
+		query = query.Where("Username LIKE ?" , fmt.Sprintf("%s%s%s","%",params["username"],"%"))
+	}
+	if params["status"] !="" {
+		query = query.Where("Status =?",params["status"])
+	}
+	err :=query.Find(&result).Error
 	if err != nil {
 		panic(err)
 	}
@@ -31,13 +40,15 @@ func Login(params map[string]string) (result map[string]interface{}) {
 	}else{
 		errs := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(params["password"]))
 		if errs != nil {
+			
 			result["code"] = 400
-			result["msg"] = "账号或密码错误1"
+			result["msg"] = "账号或密码错误!"
 		}else{
 			result["code"] = 200
 			result["data"] = user
 		}
-		
+		log.Println(params["password"])
+		log.Println([]byte(params["password"]))
 	}
 	return 
 }

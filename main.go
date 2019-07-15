@@ -3,8 +3,8 @@ package main
 import (
 	//"net/http"
     "github.com/gin-gonic/gin"
-	"demo/controllers"
-	"demo/middleware"
+	"github.com/goweb/controllers"
+	"github.com/goweb/middleware"
 )
 func main() {
 	

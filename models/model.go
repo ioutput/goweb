@@ -1,7 +1,7 @@
 package models
 
 import (
-	"demo/utils"
+	"github.com/goweb/utils"
 	"github.com/jinzhu/gorm"
   _ "github.com/go-sql-driver/mysql"
 )
@@ -16,7 +16,7 @@ type Model struct {
 var DB *gorm.DB
 func init() {
 	var err error
-	DB,err = gorm.Open("mysql", "root:123456@tcp(localhost:3306)/blog?charset=utf8&parseTime=True&loc=Local")
+	DB,err = gorm.Open("mysql", "root:123456@tcp(localhost:3306)/test?charset=utf8&parseTime=True&loc=Local")
 	//defer db.Close()
 	if err != nil {
 		panic(err)
