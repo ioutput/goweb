@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"net/http"
 	"github.com/goweb/models"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -35,16 +36,16 @@ func Login(params map[string]string) (result map[string]interface{}) {
 	var user models.User
 	err := models.DB.Where(&models.User{Username:params["username"]}).First(&user).Error
 	if err != nil{
-		result["code"] = 400
+		result["code"] = http.StatusBadRequest
 		result["msg"] = "账号或密码错误"
 	}else{
 		errs := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(params["password"]))
 		if errs != nil {
 			
-			result["code"] = 400
+			result["code"] = http.StatusBadRequest
 			result["msg"] = "账号或密码错误!"
 		}else{
-			result["code"] = 200
+			result["code"] = http.StatusOK
 			result["data"] = user
 		}
 		log.Println(params["password"])
@@ -61,10 +62,10 @@ func Register(user models.User) (result map[string]interface{}) {
 	err := models.DB.Create(&user).Error
 	
 	if err != nil{
-		result["code"] = 400
+		result["code"] = http.StatusBadRequest
 		result["msg"] = err
 	}else{
-		result["code"] = 200
+		result["code"] = http.StatusOK
 		result["data"] = user
 	}
 

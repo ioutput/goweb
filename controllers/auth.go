@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	//"strconv"
+	"log"
 	"net/http"
 	"github.com/goweb/service"
 	"github.com/goweb/middleware"
@@ -13,6 +13,7 @@ import (
 func Login(c *gin.Context) {
 	var token string
 	var data interface{}
+	log.Println(c.PostForm("username"),c.PostForm("password"))
 	user := service.Login(map[string]string{"username":c.PostForm("username"),"password":c.PostForm("password")})
 	code := http.StatusOK
 	if user["code"] == 200 {
