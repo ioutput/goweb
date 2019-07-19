@@ -21,6 +21,7 @@ func main() {
 		v1.POST("user",controllers.CreateUser)
 
 		v1.GET("menu",controllers.GetMenu)
+		v1.GET("levelmenu",controllers.LevelMenu)
 		v1.GET("menu/:id",controllers.ViewMenu)
 		v1.PUT("menu/:id",controllers.UpdateMenu)
 		v1.DELETE("menu/:id",controllers.DeleteMenu)

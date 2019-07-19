@@ -77,3 +77,7 @@ func DeleteMenu(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": status, "data": result})
 }
 
+func LevelMenu(c *gin.Context) {
+
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": service.LevelMenu()})
+}

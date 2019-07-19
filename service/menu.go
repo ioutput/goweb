@@ -6,7 +6,13 @@ import (
 	"github.com/goweb/models"
 )
 
-
+type LeMenu struct {
+	models.Menu
+	Key   	uint `json:"key"`
+	Value   uint `json:"value"`
+	Title   string `json:"title"`
+	Child []LeMenu `json:"children"`
+}
 
 //查询列表
 func ListMenu(params map[string]string) (result []models.Menu) {
@@ -26,4 +32,36 @@ func ListMenu(params map[string]string) (result []models.Menu) {
 		panic(err)
 	}
 	return 
+}
+
+func LevelMenu() (lists []LeMenu) {
+	var data []LeMenu
+	
+	err := models.DB.Table("menus").Scan(&data).Error
+	if err != nil {
+		panic(err)
+	}
+	lists = getChilds(data,0)
+	/* if len(lists) > 0 {
+		for k,v := range lists {
+			v.
+			data[k] = v
+		}
+	} */
+	return
+}
+
+func getChilds(data []LeMenu , pid uint) (result []LeMenu) {
+	
+	for _,v := range data {
+		if v.Pid == pid {
+			v.Key = v.Id
+			v.Value = v.Id
+			v.Title = v.Name
+			v.Child = getChilds(data,v.Id)
+			result = append(result,v)
+		}
+		
+	}
+	return
 }
