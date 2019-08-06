@@ -4,8 +4,8 @@ import (
 	"log"
 	"strconv"
 	"net/http"
-	"github.com/goweb/models"
-	"github.com/goweb/service"
+	"github.com/ioutput/goweb/models"
+	"github.com/ioutput/goweb/service"
 	"github.com/gin-gonic/gin"
 )
 
