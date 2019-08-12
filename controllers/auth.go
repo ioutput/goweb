@@ -3,8 +3,8 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"github.com/ioutput/goweb/service"
-	"github.com/ioutput/goweb/middleware"
+	"goweb/service"
+	"goweb/middleware"
 	"github.com/gin-gonic/gin"
 )
 

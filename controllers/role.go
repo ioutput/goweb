@@ -3,8 +3,8 @@ package controllers
 import (
 	"strconv"
 	"net/http"
-	"github.com/ioutput/goweb/models"
-	"github.com/ioutput/goweb/service"
+	"goweb/models"
+	"goweb/service"
 	"github.com/gin-gonic/gin"
 )
 

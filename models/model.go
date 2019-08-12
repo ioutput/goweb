@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/ioutput/goweb/utils"
+	"goweb/utils"
 	"github.com/jinzhu/gorm"
   _ "github.com/go-sql-driver/mysql"
 )

@@ -5,7 +5,7 @@ import (
 	"log"
 	"strconv"
 	"net/http"
-	"github.com/ioutput/goweb/models"
+	"goweb/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

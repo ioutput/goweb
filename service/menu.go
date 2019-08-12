@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 	"strconv"
-	"github.com/ioutput/goweb/models"
+	"goweb/models"
 )
 
 type LeMenu struct {
