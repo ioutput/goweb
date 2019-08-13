@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"goweb/service"
 	"goweb/middleware"
@@ -11,10 +10,11 @@ import (
 
 
 func Login(c *gin.Context) {
-	var token string
-	var data interface{}
-	log.Println(c.PostForm("username"),c.PostForm("password"))
-	user := service.Login(map[string]string{"username":c.PostForm("username"),"password":c.PostForm("password")})
+	var (
+		token string
+	 	data interface{}
+	)
+	user := service.Login(c.PostForm("username"),c.PostForm("password"))
 	code := http.StatusOK
 	if user["code"] == 200 {
 		data = user["data"]

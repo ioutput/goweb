@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"log"
+	//"log"
 	"strconv"
 	"net/http"
 	"goweb/models"
@@ -31,15 +31,15 @@ func ListUser(params map[string]string) (result []models.User) {
 	return 
 }
 
-func Login(params map[string]string) (result map[string]interface{}) {
+func Login(username,password string) (result map[string]interface{}) {
 	result = make(map[string]interface{})
 	var user models.User
-	err := models.DB.Where(&models.User{Username:params["username"]}).First(&user).Error
+	err := models.DB.Where(&models.User{Username:username}).First(&user).Error
 	if err != nil{
 		result["code"] = http.StatusBadRequest
 		result["msg"] = "账号或密码错误"
 	}else{
-		errs := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(params["password"]))
+		errs := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 		if errs != nil {
 			
 			result["code"] = http.StatusBadRequest
@@ -48,8 +48,6 @@ func Login(params map[string]string) (result map[string]interface{}) {
 			result["code"] = http.StatusOK
 			result["data"] = user
 		}
-		log.Println(params["password"])
-		log.Println([]byte(params["password"]))
 	}
 	return 
 }
