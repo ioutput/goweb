@@ -1,18 +1,56 @@
 package main
 
 import (
-	//"net/http"
-    "github.com/gin-gonic/gin"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
+	"io/ioutil"
+	"os"
+	"os/exec"
 	"goweb/controllers"
 	"goweb/middleware"
 )
+
 func main() {
 	
+	startCmd := &cobra.Command{
+		Use:   "start",
+		Short: "start web server",
+		Long:  "start web server port 3008",
+		Run: func(cmd *cobra.Command, args []string) {
+			command := exec.Command("goweb", "start")
+			command.Start()
+			fmt.Printf("goweb start, [PID] %d running...\n", command.Process.Pid)
+			ioutil.WriteFile("/run/goweb.lock", []byte(fmt.Sprintf("%d", command.Process.Pid)), 0666)
+			os.Exit(0)
+			start()
+		},
+	}
+	var stopCmd = &cobra.Command{
+		Use:   "stop",
+		Short: "Stop goweb",
+		Run: func(cmd *cobra.Command, args []string) {
+			strb, _ := ioutil.ReadFile("/run/goweb.lock")
+			command := exec.Command("kill", string(strb))
+			command.Start()
+			println("goweb stop")
+		},
+	}
+	//startCmd.Flags().BoolVarP(&daemon, "deamon", "d", false, "is daemon?")
+	var rootCmd = &cobra.Command{Use: "goweb"}
+	rootCmd.AddCommand(startCmd, stopCmd)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+func start() {
 	router := gin.Default()
 	router.Use(middleware.Cors())
-	//router.OPTIONS("/login",controllers.Login)
+	router.OPTIONS("/login",controllers.Login)
 	router.POST("/login",controllers.Login)
-	v1 := router.Group("/api/",middleware.CheckToken)
+	 v1 := router.Group("/api/",middleware.CheckToken)
 	{
 		v1.GET("user",controllers.GetUser)
 		v1.GET("user/:id",controllers.ViewUser)
@@ -32,7 +70,7 @@ func main() {
 		v1.PUT("role/:id",controllers.UpdateRole)
 		v1.DELETE("role/:id",controllers.DeleteRole)
 		v1.POST("role",controllers.CreateRole)
-	}	
+	}
 	//defer models.db.Close()
-	router.Run(":3008")
+	router.Run(":3009")
 }
