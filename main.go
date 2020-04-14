@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
-	"goweb/controllers"
 	"goweb/conf"
+	"goweb/controllers"
 	"goweb/middleware"
 	"io/ioutil"
 	"os"
@@ -16,21 +16,22 @@ func main() {
 	startCmd := &cobra.Command{
 		Use:   "start",
 		Short: "start web server",
-		Long:  "start web server port 3008",
+		Long:  "start web server port 3009",
 		Run: func(cmd *cobra.Command, args []string) {
+			start()
 			command := exec.Command("goweb", "start")
 			command.Start()
 			fmt.Printf("goweb start, [PID] %d running...\n", command.Process.Pid)
-			ioutil.WriteFile("/run/goweb.lock", []byte(fmt.Sprintf("%d", command.Process.Pid)), 0666)
+			ioutil.WriteFile("/run/goweb.pid", []byte(fmt.Sprintf("%d", command.Process.Pid)), 0666)
 			os.Exit(0)
-			start()
+
 		},
 	}
 	var stopCmd = &cobra.Command{
 		Use:   "stop",
 		Short: "Stop goweb",
 		Run: func(cmd *cobra.Command, args []string) {
-			strb, _ := ioutil.ReadFile("/run/goweb.lock")
+			strb, _ := ioutil.ReadFile("/run/goweb.pid")
 			command := exec.Command("kill", string(strb))
 			command.Start()
 			println("goweb stop")
@@ -46,9 +47,9 @@ func main() {
 }
 
 func start() {
-	if err := conf.Init(); err != nil{
+	if err := conf.Init(); err != nil {
 		fmt.Println("Error opening file:", err)
-        return
+		return
 	}
 	router := gin.Default()
 	router.Use(middleware.Cors())

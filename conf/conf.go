@@ -11,18 +11,18 @@ type MysqlConf struct {
 	Username string
 	Password string
 	Host     string
-	Port     int64
+	Port     uint32
 	Name     string
 }
 type Setting struct {
 	Mysql *MysqlConf
 }
 
-var Settings *Setting
+var Settings *Setting = &Setting{Mysql: &MysqlConf{Username: "root", Password: "wiu5201314", Host: "localhost", Port: 3306, Name: "test"}}
 
 func Init() (err error) {
 	//dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	//var cp *Setting
+	//Settings = new(Setting)
 	if _, err = toml.DecodeFile("/etc/goweb/config.toml", &Settings); err != nil {
 		log.Fatal(err)
 	}
